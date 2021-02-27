@@ -1,17 +1,17 @@
 #! /bin/sh
 
-#redirect_local_ip="sed -i -r '/kivirik\.ee$/s/^#*//g' /etc/hosts"
-#stop_redirect_local_ip="sed -i -r '/kivirik\.ee$/s/^#*/#/g' /etc/hosts"
+echo "network up `date`" >> /home/tonis/connection.log
+is_local=$(ping -c 1 kivirik.local | grep "1 received")
 
-echo "network up" >> /home/tonis/connection.log
-
-is_local=$(ping -c 1 kivirik.local | grep "1 packets transmitted")
-
-if [ "$is_local" == 0 ]
+if [ "$is_local"  ]
 then
- echo "connected \n" >> /home/tonis/connection.log
+ echo "connected to local" >> /home/tonis/connection.log
+ ufw allow ssh
+ sed -i -r '/kivirik\.ee$/s/^#*//g' /etc/hosts
 else
- echo "connected to other network \n" >> /home/tonis/connection.log
+ echo "connected to other network" >> /home/tonis/connection.log
+ ufw deny ssh
+ sed -i -r '/kivirik\.ee$/s/^#*/#/g' /etc/hosts
 fi
 
 exit 0
