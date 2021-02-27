@@ -1,0 +1,17 @@
+#! /bin/sh
+
+#redirect_local_ip="sed -i -r '/kivirik\.ee$/s/^#*//g' /etc/hosts"
+#stop_redirect_local_ip="sed -i -r '/kivirik\.ee$/s/^#*/#/g' /etc/hosts"
+
+echo "network up" >> /home/tonis/connection.log
+
+is_local=$(ping -c 1 kivirik.local | grep "1 packets transmitted")
+
+if [ "$is_local" == 0 ]
+then
+ echo "connected \n" >> /home/tonis/connection.log
+else
+ echo "connected to other network \n" >> /home/tonis/connection.log
+fi
+
+exit 0
